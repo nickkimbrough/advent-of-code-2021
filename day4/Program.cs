@@ -29,18 +29,45 @@ while (drawNumbers.Count > 0)
     // Mark the cards
     foreach (int[][] bingoCard in bingoCards)
     {
-
+        for (int i = 0; i < bingoCardSize; i++)
+        {
+            for (int j = 0; j < bingoCardSize; j++)
+            {
+                if (bingoCard[i][j] == drawnNumber)
+                {
+                    bingoCard[i][j] = -1;
+                }
+            }
+        }
     }
 
+    // Search for a winner
+    foreach (int[][] bingoCard in bingoCards)
+    {
+        // Check Columns
+        for (int i = 0; i < bingoCardSize; i++)
+        {
+            int columnSum = 0;
+            for (int j = 0; j < bingoCardSize; j++)
+            {
+                columnSum += bingoCard[j][i];
+            }
+
+            if (columnSum == -5)
+            {
+                Console.WriteLine((bingoCard.SelectMany(item => item).Sum(x => x != -1 ? x : 0)) * drawnNumber);
+                Environment.Exit(0);
+            }
+        }
+
+        // Check Rows
+        foreach (int[] row in bingoCard)
+        {
+            if (row.Sum() == -5)
+            {
+                Console.WriteLine((bingoCard.SelectMany(item => item).Where(x => x != -1).Sum()) * drawnNumber);
+                Environment.Exit(0);
+            }
+        }
+    }
 }
-
-
-
-
-Console.WriteLine("b'ah");
-
-
-
-
-
-//answer = sum of board * last number called
